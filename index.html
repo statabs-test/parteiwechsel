@@ -20,11 +20,11 @@
   .link {
     fill: none;
     stroke: #000;
-    stroke-opacity: .2;
+    stroke-opacity: .4;
   }
 
   .link:hover {
-    stroke-opacity: .5;
+    stroke-opacity: 0.9;
   }
 
 	.tooltip {
@@ -154,11 +154,12 @@
 							.style("stroke-width", function(d) { return Math.max(1, d.dy); })
 							.style("fill","none")
 							.style("stroke", function (d){ return colors(d.source.name); })
-							.style("stroke-opacity",".4")
 							.sort(function(a, b) { return b.dy - a.dy; })
+
 							.on("mouseover", mouseover)
 							.on("mousemove", d => mousemove(d))
 							.on("mouseout", mouseout)
+
 							/*			    
 							.append("title")
 							.text(function(d) {return d.value})        
