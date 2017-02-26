@@ -48,7 +48,11 @@
 	var nodeWidth = 5;
 	var sortBy = 'size';
 
-  var colors = d3.scaleOrdinal(d3.schemeCategory10);
+  //var colors = d3.scaleOrdinal(d3.schemeCategory10);
+	var colors = d3.scaleOrdinal()
+		.domain(["SD", "VEW", "FraB", "GB", "SVP", "SP", "DSP", "FP", "FDP", "CVP"])
+		.range(["rgb(130, 27, 33)", "rgb(255, 215, 0)", "rgb(255, 140, 255)", "rgb(70, 187, 5)", "rgb(0, 128, 0)", "rgb(255, 0, 0)", "rgb(169, 115, 199)", "rgb(191, 179, 128)", "rgb(51, 102, 255)", "rgb(255, 153, 0)"])
+		;
 
   d3.json("parteiwechsel.json", function(data) {
     var selection = d3.select("#chart2").append("svg")
@@ -134,7 +138,7 @@
 			})
 		})
 
-	 	colors.domain(links, function (d){ return d.source.name; });
+	 	//colors.domain(links, function (d){ return d.source.name; });
 
     var tip = d3.tip()
       .attr('class', 'd3-tip')
