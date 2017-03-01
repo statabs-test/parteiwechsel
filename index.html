@@ -4,7 +4,7 @@
 <title>Parteiwechsel</title>
 <style>
   #chart {
-    height: 350px;
+    height: 360px;
   }
 
   .node rect {
@@ -27,29 +27,36 @@
     stroke-opacity: 0.9;
   }
 
+	.label {
+		font-size: 10px;
+		font-family: Arial, Helvetica;
+		font-weight: bold;
+	}
+
 	.tooltip {
 		position: absolute;
 		text-align: center;
 		width: 80px;
-		height: 12px;
+		height: 32px;
 		padding: 8px;
 		margin-top: -20px;
-		font: 10px sans-serif;
+		font: 10px Arial, Helvetica;
 		background: #ddd;
 		pointer-events: none;
 	}
+	
 
 </style>
 
 <body>
-  <div id="chart2"></div>  
+	<br/>
   <div id="chart"></div>  
 
   <script src="https://d3js.org/d3.v4.js"></script>
   <script src="https://unpkg.com/d3-sankey@0.4.1"></script>
 
   <script>
-
+		/* global d3 */
 		(function(){	
 			var width = 650;
 			var height = 340;
@@ -62,7 +69,7 @@
 				;
 
 			d3.json("parteiwechsel.json", function(data) {
-				var selection = d3.select("#chart2").append("svg")
+				var selection = d3.select("#chart").append("svg");
 				var formatNumber = d3.format(",.0f"),
 						format = function(d) { return formatNumber(d); };
 
@@ -77,7 +84,7 @@
 				var nested = d3.nest()
 						.key(function (d){ return d.group; })
 						.rollup(function (d){ return d.length; })
-						.entries(data.nodes)
+						.entries(data.nodes);
 
 				var maxNodes = d3.max(nested, function (d){ return d.values; });
 
@@ -102,23 +109,23 @@
 						.map(nodes);
 
 					d3.values(nested)
-						.filter(function(d){return d instanceof Array})
+						.filter(function(d){return d instanceof Array;})
 						.forEach(function (d){
 							var y = ( height - d3.sum(d,function(n){ return n.dy+sankey.nodePadding();}) ) / 2 + sankey.nodePadding()/2;
 							d.sort(function (a,b){
 								if (sortBy == "automatic") return b.y - a.y;
 								if (sortBy == "size") return b.dy - a.dy;
 								if (sortBy == "name") return a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
-							})          
+							});        
 							d.forEach(function (node){
 								node.y = y;
 								y += node.dy +sankey.nodePadding();
-							})
+							});
 						})
 
 					// Resorting links
 
-				d3.values(nested).filter(function(d){return d instanceof Array}).forEach(function (d){
+				d3.values(nested).filter(function(d){return d instanceof Array;}).forEach(function (d){
 
 					d.forEach(function (node){
 
@@ -130,7 +137,7 @@
 								.forEach(function (link){
 									link.sy = ly;
 									ly += link.dy;
-								})
+								});
 
 							ly = 0;
 
@@ -141,9 +148,9 @@
 								.forEach(function (link){
 									link.ty = ly;
 									ly += link.dy;
-								})
-					})
-				})
+								});
+					});
+				});
 
 
 				var link = g.append("g").selectAll(".link")
@@ -157,7 +164,7 @@
 							.sort(function(a, b) { return b.dy - a.dy; })
 
 							.on("mouseover", mouseover)
-							.on("mousemove", d => mousemove(d))
+							.on("mousemove", function(d){mousemove(d)})
 							.on("mouseout", mouseout)
 
 							/*			    
@@ -176,9 +183,9 @@
 
 				function mousemove(d) {
 					div
-							.html(d.source.name + " → " + d.target.name + ": <strong>" + format(d.value) + "</strong>")
-							.style("left", (d3.event.pageX - 34) + "px")
-							.style("top", (d3.event.pageY - 12) + "px");
+							.html("<strong>" + format(d.value) + " Person" + (function(d){return format(d.value) > 1 ? "en" : ""}(d)) + "</strong> wechselte" + (function(d){return format(d.value) > 1 ? "n" : ""}(d)) + " von <strong>" + d.source.name + "</strong> zu <strong>" + d.target.name + "</strong>")
+							.style("left", (d3.event.pageX - 50) + "px")
+							.style("top", (d3.event.pageY - 28) + "px");
 				}
 
 				function mouseout() {
@@ -190,7 +197,7 @@
 						.data(nodes)
 						.enter().append("g")
 								.attr("class", "node")
-								.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+								.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")";});
 
 				node.append("text")
 						.attr("x", -6)
@@ -199,14 +206,13 @@
 							.attr("text-anchor", "end")
 							.attr("transform", null)
 							.text(function(d) { return d.name; })
-							.style("font-size","11px")
-						.style("font-family","Arial, Helvetica")
+							.attr("class", "label")
 							.style("pointer-events","none")
 							.filter(function(d) { return d.x < +width / 2; })
 							.attr("x", 6 + sankey.nodeWidth())
 							.attr("text-anchor", "start");
-			})
-		}())
+			});
+		}());
 
   </script>
 
