@@ -1,8 +1,29 @@
 {
   "scripts": {
-    "server": "http-server -p 8000 -c-1 -s -o "
+    "start": "npm build && npm run server",
+    "build": "npm install && npm run build:copy_modules",
+    "server": "http-server -p 8000 -c-1 -s -o ",
+    "build:copy_modules": "echo 'Copying required node_modules to assets/js/modules...' && copy-node-modules . assets/js -v && rm -rf assets/js/modules && mv assets/js/node_modules assets/js/modules",
+    "build:update_dependencies": "npm prune --production=false && npm update --dev",
+    "build:shrinkpack": "npm shrinkwrap --dev && shrinkpack"
+
   },
   "dependencies": {
-    "http-server": "^0.9.0"
-  }
+    "d3": "^4.7.0",
+    "d3-sankey": "^0.4.2"
+  },
+  "devDependencies": {
+    "copy-node-modules": "^0.4.1",
+    "http-server": "^0.9.0",
+    "shrinkpack": "^0.18.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/statabs/parteiwechsel"
+  },
+  "author": "Jonas Bieri",
+  "bugs": {
+    "url": "https://github.com/statabs-test/parteiwechsel/issues"
+  },
+  "homepage": "http://www.statistik.bs.ch"
 }
