@@ -9,8 +9,8 @@
 
   },
   "dependencies": {
-    "d3": "^4.7.0",
-    "d3-sankey": "^0.4.2"
+    "d3": "^7.0.0",
+    "d3-sankey": "^0.6.1"
   },
   "devDependencies": {
     "copy-node-modules": "^0.4.1",
